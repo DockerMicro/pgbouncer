@@ -10,22 +10,23 @@ if [ ! -f /databases.ini ]; then
 
     printf "\
 [databases]
-* = host=${POSTGRES_PORT_5432_TCP_ADDR} port=${POSTGRES_PORT_5432_TCP_PORT}
+* = host=${POSTGRES_PORT_5432_TCP_ADDR} port=${POSTGRES_PORT_5432_TCP_PORT} auth_user=pgbouncer
 " > /databases.ini
 
     echo -e "POSTGRES_PORT_5432_TCP_ADDR is set - generated default databases.ini pooling all connections to any DB\n"
 fi
 
-if [ ! -f /pg_hba ]; then
-    echo "/pg_hba doesn't exist'"
+if [ ! -f /pg_hba.conf ]; then
+    echo "/pg_hba.conf doesn't exist'"
 
     printf "\
 local       all     all     peer
 host        all     all     0.0.0.0/0       md5
-" > /pg_hba
+" > /pg_hba.conf
 
-    echo -e "Generated default pg_hba allowing peer authenticated local (socket) connections and password md5 authenticated remote connections from any host to any database\n"
+    echo -e "Generated default pg_hba.conf allowing peer authenticated local (socket) connections and password md5 authenticated remote connections from any host to any database\n"
 fi
+
 
 echo "Starting pgbouncer..."
 if [ -n "$PG_USER" ]; then
